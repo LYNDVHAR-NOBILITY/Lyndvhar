@@ -259,3 +259,33 @@
 	desc = "Part robe, part butcher's apron."
 	icon_state = "surgrobe"
 	item_state = "surgrobe"
+
+/obj/item/clothing/suit/roguetown/shirt/robe/bath
+	name = "bathrobe"
+	desc = "A bathrobe with a luxurious fur interior."
+	icon_state = "bathrobe"
+	toggle_icon_state = TRUE
+	adjustable = CAN_CADJUST
+	body_parts_covered = ARM_LEFT|ARM_RIGHT
+	sellprice = 12
+
+/obj/item/clothing/suit/roguetown/shirt/robe/bath/AdjustClothes(mob/user)
+	if(loc == user)
+		if(adjustable == CAN_CADJUST)
+			adjustable = CADJUSTED
+			if(toggle_icon_state)
+				icon_state = "[initial(icon_state)]_t"
+			flags_inv = null
+			if(ishuman(user))
+				var/mob/living/carbon/H = user
+				H.update_inv_armor()
+				H.update_icon()
+		else if(adjustable == CADJUSTED)
+			ResetAdjust(user)
+			flags_inv = HIDEBOOB
+			body_parts_covered = ARM_LEFT|ARM_RIGHT|CHEST|GROIN
+			if(user)
+				if(ishuman(user))
+					var/mob/living/carbon/H = user
+					H.update_inv_armor()
+					H.update_icon()

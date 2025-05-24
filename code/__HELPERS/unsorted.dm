@@ -1629,3 +1629,20 @@ GLOBAL_LIST_INIT(duplicate_forbidden_vars,list(
 		var/percentage = skill_level / SKILL_LEVEL_LEGENDARY // Turns it into a percentage
 		var/result = LERP(slowest, fastest, percentage)
 		return result SECONDS
+
+// How long an action (e.g. do_after) can takes IN SECONDS by using stat checks, from 5 to 16
+/proc/get_stat_delay(stat, fastest = 0.4, slowest = 6.4) 
+	if(stat <= 5) //can't divivde by zero
+		return slowest SECONDS
+	if(stat >= 16)
+		return fastest SECONDS
+	else
+		var/percentage = stat / 16 // Turns it into a percentage
+		var/result = LERP(slowest, fastest, percentage)
+		return result SECONDS
+
+/proc/get_unarmed_cd(stat, extra_cd = 0) //Thrown together to serve as a reusable stat-based clickcd for things like jumping and kicking.
+	var/cooldown = (22 - stat)
+	cooldown = clamp(cooldown, 8, 14)
+	cooldown += extra_cd 
+	return cooldown

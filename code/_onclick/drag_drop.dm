@@ -10,7 +10,7 @@
 		return
 	if(SEND_SIGNAL(src, COMSIG_MOUSEDROP_ONTO, over, usr) & COMPONENT_NO_MOUSEDROP)	//Whatever is receiving will verify themselves for adjacency.
 		return
-	if(!Adjacent(usr) || !over.Adjacent(usr))
+	if(!Adjacent(usr) || !over.Adjacent(usr) && !istype(over, /turf/closed))
 		return // should stop you from dragging through windows
 	var/list/L = params2list(params)
 	if (L["middle"])

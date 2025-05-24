@@ -28,11 +28,19 @@
 	if(SEND_SIGNAL(src, COMSIG_HUMAN_EARLY_UNARMED_ATTACK, A, proximity) & COMPONENT_NO_ATTACK_HAND)
 		return
 	SEND_SIGNAL(src, COMSIG_HUMAN_MELEE_UNARMED_ATTACK, A, proximity)
+	var/rmb_stam_penalty = 0
+	var/stamstagger = FALSE
+	if(istype(rmb_intent, /datum/rmb_intent/strong))
+		rmb_stam_penalty = 4
+	if(istype(rmb_intent, /datum/rmb_intent/swift))
+		rmb_stam_penalty = 5
+		stamstagger = TRUE
 	if(isliving(A))
 		var/mob/living/L = A
 		if(!used_intent.noaa)
 			playsound(get_turf(src), pick(GLOB.unarmed_swingmiss), 100, FALSE)
-//			src.emote("attackgrunt")
+		if(used_intent.releasedrain)
+			rogfat_add((used_intent.releasedrain + rmb_stam_penalty), stagger = stamstagger)
 		if(L.checkmiss(src))
 			return
 		if(!L.checkdefense(used_intent, src))
@@ -275,7 +283,7 @@
 				if(IsOffBalanced())
 					to_chat(src, span_warning("I haven't regained my balance yet."))
 					return
-				changeNext_move(mmb_intent.clickcd)
+				changeNext_move(get_unarmed_cd(STASPD))
 				face_atom(A)
 
 				if(ismob(A))
@@ -306,7 +314,7 @@
 							M.onkick(src)
 				else
 					A.onkick(src)
-				OffBalance(30)
+				OffBalance(24 - STASPD)
 				return
 			if(INTENT_JUMP)
 				if(istype(src.loc, /turf/open/water))
@@ -331,7 +339,7 @@
 				if(A.z != src.z)
 					if(!HAS_TRAIT(src, TRAIT_ZJUMP))
 						return
-				changeNext_move(mmb_intent.clickcd)
+				changeNext_move(get_unarmed_cd(STASPD))
 				face_atom(A)
 				if(m_intent == MOVE_INTENT_RUN)
 					emote("leap", forced = TRUE)
@@ -340,14 +348,17 @@
 				var/jadded
 				var/jrange
 				var/jextra = FALSE
+				var/acrobatic = 0
+				if(HAS_TRAIT(src, TRAIT_LEAPER))
+					acrobatic = 8
 				if(m_intent == MOVE_INTENT_RUN)
-					OffBalance(30)
+					OffBalance(40 - STASPD - acrobatic)
 					jadded = 15
 					jrange = 3
-					if(!HAS_TRAIT(src, TRAIT_LEAPER))// The Jester lands where the Jester wants.
+					if(!HAS_TRAIT(src, TRAIT_LEAPER))// The Jester lands where the Jester wants. Used for Acrobatic virtue too.
 						jextra = TRUE
 				else
-					OffBalance(20)
+					OffBalance(30 - STASPD - acrobatic)
 					jadded = 10
 					jrange = 2
 				if(ishuman(src))
@@ -387,7 +398,7 @@
 				if(HAS_TRAIT(src, TRAIT_NO_BITE))
 					to_chat(src, span_warning("I can't bite."))
 					return
-				changeNext_move(mmb_intent.clickcd)
+				changeNext_move(get_unarmed_cd(STASPD))
 				face_atom(A)
 				A.onbite(src)
 				return
@@ -405,7 +416,7 @@
 					var/list/mobsbehind = list()
 					var/exp_to_gain = STAINT
 					to_chat(src, span_notice("I try to steal from [V]..."))	
-					if(do_after(src, 5, target = V, progress = 0))
+					if(do_after(src, get_skill_delay(thiefskill, 0.2, 3), target = V, progress = 0))
 						if(stealroll > targetperception)
 						//TODO add exp here
 							// RATWOOD MODULAR START

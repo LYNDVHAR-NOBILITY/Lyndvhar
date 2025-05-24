@@ -23,8 +23,14 @@
 		if(L.mobility_flags & MOBILITY_MOVE)
 			wallpress(L)
 			return
+	else
+		if(isliving(O) && isliving(user) && get_dist(O, src) <= 1)
+			var/mob/living/L = user
+			if(L.mobility_flags & MOBILITY_MOVE)
+				wallpress(O, L)
+				return
 
-/turf/closed/proc/wallpress(mob/living/user)
+/turf/closed/proc/wallpress(mob/living/user, pushed = null)
 	if(user.wallpressed)
 		return
 	if(user.is_shifted)
@@ -36,7 +42,10 @@
 		return
 	user.wallpressed = dir2wall
 	user.update_wallpress_slowdown()
-	user.visible_message(span_info("[user] leans against [src]."))
+	if(!pushed)
+		user.visible_message(span_info("[user] leans against [src]."))
+	else
+		user.visible_message(span_warning("[pushed] pushes [user] against [src]!"))
 	switch(dir2wall)
 		if(NORTH)
 			user.setDir(SOUTH)

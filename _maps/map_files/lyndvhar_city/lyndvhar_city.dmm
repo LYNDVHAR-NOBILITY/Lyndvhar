@@ -421,10 +421,6 @@
 /area/rogue/indoors/town/tavern{
 	first_time_text = "THE FOOL'S FLAGON"
 	})
-"amO" = (
-/obj/effect/landmark/start/courtagent,
-/turf/open/floor/rogue/cobble,
-/area/rogue/outdoors/town)
 "amZ" = (
 /obj/machinery/light/rogue/wallfire/candle{
 	pixel_x = 32;
@@ -1743,11 +1739,6 @@
 "bbK" = (
 /obj/structure/closet/crate/chest/wicker,
 /turf/open/floor/rogue/dirt,
-/area/rogue/outdoors/town)
-"bcn" = (
-/obj/structure/fluff/walldeco/wantedposter/r,
-/obj/effect/landmark/start/courtagent,
-/turf/open/floor/rogue/cobble,
 /area/rogue/outdoors/town)
 "bcW" = (
 /obj/machinery/light/rogue/wallfire/candle,
@@ -3358,9 +3349,12 @@
 /turf/open/water/cleanshallow,
 /area/rogue/under/town/basement/keep)
 "cvt" = (
+/obj/structure/chair/stool/rogue,
 /obj/effect/landmark/start/courtagent,
-/turf/open/floor/rogue/wood,
-/area/rogue/outdoors/town)
+/turf/open/floor/rogue/woodturned,
+/area/rogue/indoors/town/tavern{
+	first_time_text = "THE FOOL'S FLAGON"
+	})
 "cvz" = (
 /obj/structure/fluff/railing/border{
 	dir = 8
@@ -12767,7 +12761,7 @@
 /obj/structure/roguewindow/openclose/reinforced{
 	dir = 1
 	},
-/turf/closed/wall/mineral/rogue/decowood,
+/turf/open/floor/rogue/hexstone,
 /area/rogue/indoors/town/shop)
 "jaD" = (
 /obj/structure/plasticflaps,
@@ -92972,7 +92966,7 @@ vFk
 itt
 jes
 mRX
-amO
+bRY
 bRY
 bRY
 bRY
@@ -93947,7 +93941,7 @@ fZu
 bRY
 bpi
 puA
-cvt
+puA
 puA
 dFt
 uMr
@@ -95705,7 +95699,7 @@ mRs
 jHi
 mgI
 lUH
-mmK
+cvt
 oEV
 yhx
 yhx
@@ -95724,7 +95718,7 @@ ktH
 rCg
 tCy
 bRY
-amO
+bRY
 bRY
 bRY
 tNZ
@@ -95867,7 +95861,7 @@ mRs
 iJJ
 dPG
 lUH
-mmK
+cvt
 oEV
 tzM
 yhx
@@ -96029,7 +96023,7 @@ hSC
 hsy
 mgI
 lUH
-mmK
+cvt
 oEV
 cVo
 cVo
@@ -96191,7 +96185,7 @@ mRs
 pcY
 mgI
 lUH
-mmK
+cvt
 oEV
 grC
 grC
@@ -97519,7 +97513,7 @@ bRY
 bRY
 bRY
 bRY
-amO
+bRY
 eMB
 nXx
 lja
@@ -98819,7 +98813,7 @@ bRY
 bRY
 tmc
 qUL
-bcn
+jsI
 bRY
 bRY
 rAp

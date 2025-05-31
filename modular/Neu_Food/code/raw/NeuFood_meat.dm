@@ -84,8 +84,12 @@
 	name = "minced fish"
 	icon_state = "fishmince"
 
+/obj/item/reagent_containers/food/snacks/rogue/meat/mince/rabbit
+	name = "minced cabbit"
+	icon_state = "meatmince"
+
 /obj/item/reagent_containers/food/snacks/rogue/meat/mince/poultry
-	name = "mince"
+	name = "mince poultry"
 	icon_state = "meatmince"
 
 
@@ -178,3 +182,21 @@
 	cooked_type = /obj/item/reagent_containers/food/snacks/rogue/meat/fish/fried
 	slices_num = 1
 	ingredient_size = 1
+
+/* ............. Cabbit Meat ................*/
+/obj/item/reagent_containers/food/snacks/rogue/meat/rabbit
+	name = "raw cabbit meat"
+	icon_state = "cabbitcutlet"
+	slice_path = /obj/item/reagent_containers/food/snacks/rogue/meat/mince/rabbit
+	fried_type = /obj/item/reagent_containers/food/snacks/rogue/meat/rabbit/fried
+	cooked_type = /obj/item/reagent_containers/food/snacks/rogue/meat/rabbit/fried
+	slices_num = 1
+	ingredient_size = 1
+
+/* ............. Volf Meat ................*/
+/obj/item/reagent_containers/food/snacks/rogue/meat/steak/wolf
+	name = "raw volf meat"
+	icon_state = "volfstrip"
+	slice_path = /obj/item/reagent_containers/food/snacks/rogue/meat/mince/beef		//Honestly, we don't need our own minced type on this one.
+	fried_type = /obj/item/reagent_containers/food/snacks/rogue/meat/steak/wolf/fried
+	cooked_type = /obj/item/reagent_containers/food/snacks/rogue/meat/steak/wolf/fried

@@ -191,6 +191,7 @@ GLOBAL_LIST_INIT(roguetown_areas_typecache, typecacheof(/area/rogue/indoors/town
 				/mob/living/simple_animal/hostile/retaliate/rogue/wolf = 40,
 				/mob/living/carbon/human/species/skeleton/npc/ambush = 10,
 				/mob/living/carbon/human/species/goblin/npc/ambush = 30,
+				/mob/living/simple_animal/hostile/retaliate/rogue/wolf/bobcat = 20,
 				/mob/living/carbon/human/species/npc/deadite = 10,
 				/mob/living/simple_animal/hostile/retaliate/rogue/youngboar = 25,
 				/mob/living/simple_animal/hostile/retaliate/rogue/middleboar = 15,
@@ -241,6 +242,7 @@ GLOBAL_LIST_INIT(roguetown_areas_typecache, typecacheof(/area/rogue/indoors/town
 				/mob/living/simple_animal/hostile/retaliate/rogue/trollbog = 20,
 				/mob/living/carbon/human/species/npc/deadite = 20,
 				/mob/living/simple_animal/hostile/retaliate/rogue/spider = 40,
+				/mob/living/simple_animal/hostile/retaliate/rogue/mole = 20,
 				/mob/living/carbon/human/species/goblin/npc/ambush/cave = 30)
 	first_time_text = "THE TERRORBOG"
 	converted_type = /area/rogue/indoors/shelter/bog
@@ -284,6 +286,9 @@ GLOBAL_LIST_INIT(roguetown_areas_typecache, typecacheof(/area/rogue/indoors/town
 	ambush_mobs = list(
 				/mob/living/simple_animal/hostile/retaliate/rogue/wolf = 30,
 				/mob/living/carbon/human/species/human/northern/searaider/ambush = 10,
+				/mob/living/simple_animal/hostile/retaliate/rogue/mole = 10,
+				/mob/living/simple_animal/hostile/retaliate/rogue/wolf/bobcat = 20,
+				/mob/living/simple_animal/hostile/retaliate/rogue/direbear = 15,
 				/mob/living/carbon/human/species/goblin/npc/ambush/sea = 40)
 	first_time_text = "THE AZURE COAST"
 	converted_type = /area/rogue/indoors/shelter/woods
@@ -324,6 +329,7 @@ GLOBAL_LIST_INIT(roguetown_areas_typecache, typecacheof(/area/rogue/indoors/town
 				/mob/living/simple_animal/hostile/retaliate/rogue/bigrat = 30,
 				/mob/living/carbon/human/species/goblin/npc/ambush/cave = 20,
 				/mob/living/carbon/human/species/skeleton/npc/ambush = 10,
+				/mob/living/simple_animal/hostile/retaliate/rogue/direbear = 5,
 				/mob/living/simple_animal/hostile/retaliate/rogue/minotaur = 5)
 	converted_type = /area/rogue/outdoors/caves
 /area/rogue/outdoors/caves

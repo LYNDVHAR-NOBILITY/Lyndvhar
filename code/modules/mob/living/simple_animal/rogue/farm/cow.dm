@@ -16,7 +16,10 @@
 	see_in_dark = 6
 	move_to_delay = 8
 	animal_species = /mob/living/simple_animal/hostile/retaliate/rogue/bull
-	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 6,
+	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 2, /obj/item/alch/sinew = 2, /obj/item/natural/bone = 4, /obj/item/alch/viscera = 1)
+	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 4,
+						/obj/item/natural/hide=1, /obj/item/natural/bundle/bone/full = 1, /obj/item/alch/sinew = 3, /obj/item/alch/bone = 1, /obj/item/alch/viscera = 2)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 6,
 						/obj/item/natural/hide=2, /obj/item/natural/bundle/bone/full = 1, /obj/item/alch/sinew = 4, /obj/item/alch/bone = 1, /obj/item/alch/viscera = 2)
 	base_intents = list(/datum/intent/simple/headbutt)
 	health = 80

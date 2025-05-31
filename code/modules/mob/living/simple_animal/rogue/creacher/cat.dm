@@ -45,7 +45,9 @@
 	del_on_deaggro = 99 SECONDS
 	
 	// Loot
+	botched_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat = 1)
 	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat = 2)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat = 2, /obj/item/natural/fur/bobcat = 1)	//Not a bobcat but fuck it, it's kinda funny.
 	rot_type = null
 	
 	// Misc

@@ -18,12 +18,28 @@
 	see_in_dark = 6
 	move_to_delay = 8
 	animal_species = /mob/living/simple_animal/hostile/retaliate/rogue/saiga/saigabuck
+	botched_butcher_results = list(
+								/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 1,
+								/obj/item/natural/bone = 4,
+								/obj/item/alch/sinew = 1,
+								)
 	butcher_results = list(
-						/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 4,
+						/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 2,
+						/obj/item/reagent_containers/food/snacks/fat = 1,
+						/obj/item/natural/hide = 2,
+						/obj/item/natural/bundle/bone/full = 1,
+						/obj/item/alch/sinew = 3, 
+						/obj/item/alch/bone = 1, 
+						/obj/item/alch/viscera = 2
+						)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 3,
 						/obj/item/reagent_containers/food/snacks/fat = 2,
 						/obj/item/natural/hide = 4,
 						/obj/item/natural/bundle/bone/full = 1,
-						)
+						/obj/item/alch/sinew = 3, 
+						/obj/item/alch/bone = 1, 
+						/obj/item/alch/viscera = 2,
+						/obj/item/natural/head/saiga = 1)
 	base_intents = list(/datum/intent/simple/headbutt)
 	health = 156
 	maxHealth = 156
@@ -67,10 +83,6 @@
 	icon_dead = "saigakid_dead"
 	icon_gib = "saigakid_gib"
 	animal_species = null
-	butcher_results = list(
-					/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 1,
-					/obj/item/natural/bone = 3,
-					)
 	health = 20
 	pass_flags = PASSTABLE | PASSMOB
 	mob_size = MOB_SIZE_SMALL
@@ -100,13 +112,6 @@
 	turns_per_move = 3
 	see_in_dark = 6
 	move_to_delay = 8
-	butcher_results = list(
-					/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 4,
-					/obj/item/reagent_containers/food/snacks/fat = 1,
-					/obj/item/natural/hide = 4,
-					/obj/item/natural/bundle/bone/full = 1,
-					/obj/item/clothing/head/roguetown/helmet/leather/saiga = 1, /obj/item/alch/sinew = 2, /obj/item/alch/bone = 1, /obj/item/alch/viscera = 1
-					)
 	faction = list("saiga")
 	attack_verb_continuous = "headbutts"
 	attack_verb_simple = "headbutt"

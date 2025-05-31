@@ -23,10 +23,75 @@
 	color = "#5c5243"
 	sellprice = 18
 
+/obj/item/natural/fur/goat
+	desc = "from a gote."
+	icon_state = "pelt_gote"
+	color = null
+
+/obj/item/natural/fur/wolf
+	desc = "from a volf."
+	icon_state = "pelt_volf"
+	color = null
+
+/obj/item/natural/fur/fox
+	desc = "from a venard."
+	icon_state = "pelt_fox"
+	color = null
+
+/obj/item/natural/fur/bobcat
+	desc = "from a lynx."
+	icon_state = "pelt_bobcat"
+	color = null
+
+/obj/item/natural/fur/mole
+	desc = "from a mole."
+	icon_state = "pelt_mole"
+	color = null
+
+/obj/item/natural/fur/rat
+	desc = "from a rous."
+	icon_state = "pelt_rous"
+	color = null
+
+/obj/item/natural/fur/direbear
+	desc = "fur from one of Dendor's mightiest creachers."
+	icon_state = "pelt_direbear"
+	color = "#33302b"
+	sellprice = 28
+
+/obj/item/natural/fur/rabbit
+	desc = "from a cabbit."
+	icon_state = "wool2"
+	color = "#cecac4"
+
 /obj/item/natural/head/volf
 	name = "volf head"
 	desc = "the head of a fearsome volf."
 	icon_state = "volfhead"
+	layer = 3.1
+
+/obj/item/natural/head/goat
+	name = "goat head"
+	desc = "the head of a simple goat."
+	icon_state = "goathead"
+	layer = 3.1
+
+/obj/item/natural/head/saiga
+	name = "saiga head"
+	desc = "the head of a proud saiga."
+	icon_state = "saigahead"
+	layer = 3.1
+
+/obj/item/natural/head/direbear
+	name = "direbear head"
+	desc = "the head of a terrifying direbear."
+	icon_state = "direbearhead"
+	layer = 3.1
+
+/obj/item/natural/head/fox
+	name = "venard head"
+	desc = "the head of a majestic venard."
+	icon_state = "foxhead"
 	layer = 3.1
 
 //RTD make this a storage item and make clickign on animals with things put it in storage
@@ -114,3 +179,10 @@
 	resistance_flags = FLAMMABLE
 	w_class = WEIGHT_CLASS_SMALL
 	sellprice = 20
+
+/obj/item/natural/rabbitsfoot
+	name = "rabbit's foot"
+	icon_state = "rabbitfoot"
+	desc = "A rabbit's foot. A lucky charm."
+	w_class = WEIGHT_CLASS_TINY
+	sellprice = 10

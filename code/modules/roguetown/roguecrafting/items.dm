@@ -829,6 +829,13 @@
 				)
 	craftdiff = 0
 
+/datum/crafting_recipe/roguetown/goodluckcharm
+	name = "cabbit's foot luck charm"
+	result = /obj/item/clothing/neck/roguetown/luckcharm // +1 fortune when worn
+	reqs = list(/obj/item/natural/rabbitsfoot = 1,
+				/obj/item/natural/fibers = 2)
+	craftdiff = 0
+
 // BOUQUETS & CROWNS
 
 /datum/crafting_recipe/roguetown/bouquet_rosa

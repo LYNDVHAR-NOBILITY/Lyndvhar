@@ -651,3 +651,25 @@
 /obj/item/clothing/neck/roguetown/collar/bell_collar/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/item_equipped_movement_rustle, SFX_JINGLE_BELLS)*/
+
+/obj/item/clothing/neck/roguetown/luckcharm
+	name = "luck charm"
+	desc = "A cabbit's foot necklace. Some say it brings good luck."
+	icon_state = "luckcharm"
+	sellprice = 15
+	slot_flags = ITEM_SLOT_NECK
+	var/goodluckactivated = FALSE
+
+/obj/item/clothing/neck/roguetown/luckcharm/equipped(mob/living/carbon/human/user, slot)
+	. = ..()
+	if(slot == SLOT_NECK)
+		user.change_stat("fortune", 1) //how much luck stat it gives when equipped
+		goodluckactivated = TRUE
+	return
+
+/obj/item/clothing/neck/roguetown/luckcharm/dropped(mob/living/carbon/human/user)
+	. = ..()
+	if(goodluckactivated == TRUE)
+		user.change_stat("fortune", -1) //how much luck stat taken away when unequipped
+		goodluckactivated = FALSE
+	return

@@ -22,7 +22,10 @@
 	move_to_delay = 7
 	vision_range = 6
 	aggro_vision_range = 6
-	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 15,
+	botched_butcher_results = list (/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 5, /obj/item/natural/bundle/bone/full = 1, /obj/item/alch/horn = 1, /obj/item/natural/hide = 5)
+	butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 10,
+						/obj/item/natural/hide = 10, /obj/item/natural/bundle/bone/full = 2, /obj/item/alch/sinew = 5, /obj/item/alch/horn = 2, /obj/item/alch/viscera = 3)
+	perfect_butcher_results = list(/obj/item/reagent_containers/food/snacks/rogue/meat/steak = 15,
 						/obj/item/natural/hide = 15, /obj/item/natural/bundle/bone/full = 3, /obj/item/alch/sinew = 7, /obj/item/alch/horn = 2, /obj/item/alch/viscera = 3)
 	health = TROLLBOG_HEALTH * 1.1
 	maxHealth = TROLLBOG_HEALTH

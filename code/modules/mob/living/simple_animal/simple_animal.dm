@@ -175,6 +175,9 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 
 	var/remains_type
 
+	var/botched_butcher_results
+	var/perfect_butcher_results
+
 /mob/living/simple_animal/Initialize()
 	. = ..()
 	GLOB.simple_animals[AIStatus] += src
@@ -388,22 +391,27 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 		if(held_item)
 			if((butcher_results || guaranteed_butcher_results) && held_item.get_sharpness() && held_item.wlength == WLENGTH_SHORT)
 				var/used_time = 210
+				if(src.buckled && istype(src.buckled, /obj/structure/meathook))
+					used_time -= 30
+					visible_message("[user] begins to efficiently butcher [src]...")
+				else
+					visible_message("[user] begins to butcher [src]...")
 				if(user.mind)
 					used_time -= (user.mind.get_skill_level(/datum/skill/labor/butchering) * 30)
-				visible_message("[user] begins to butcher [src].")
 				playsound(src, 'sound/foley/gross.ogg', 100, FALSE)
 				if(do_after(user, used_time, target = src))
-					gib()
+					butcher(user)
 					if(user.mind)
 						user.mind.add_sleep_experience(/datum/skill/labor/butchering, user.STAINT * 4)
-	else if (stat != DEAD && istype(ssaddle, /obj/item/natural/saddle))
+		
+	else if (stat != DEAD && istype(ssaddle, /obj/item/natural/saddle))		//Fallback saftey for saddles
 		var/datum/component/storage/saddle_storage = ssaddle.GetComponent(/datum/component/storage)
 		var/access_time = (user in buckled_mobs) ? 10 : 30
 		if (do_after(user, access_time, target = src))
 			saddle_storage.show_to(user)
 	..()
 
-/mob/living/simple_animal/gib()
+/mob/living/simple_animal/proc/butcher(mob/user)
 	if(ssaddle)
 		ssaddle.forceMove(get_turf(src))
 		ssaddle = null
@@ -411,9 +419,37 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 		var/list/butcher = list()
 
 		if(butcher_results)
-			butcher += butcher_results
-		if(guaranteed_butcher_results)
-			butcher += guaranteed_butcher_results
+			if(user.mind.get_skill_level(/datum/skill/labor/butchering) == 0)
+				if(prob(70))
+					butcher = botched_butcher_results // high chance to get shit result
+				else
+					butcher = butcher_results
+			if(user.mind.get_skill_level(/datum/skill/labor/butchering) == 1)
+				if(prob(50))
+					butcher = botched_butcher_results // chance to get shit result
+				else
+					butcher = butcher_results
+			if(user.mind.get_skill_level(/datum/skill/labor/butchering) == 2)
+				if(prob(30))
+					butcher = botched_butcher_results // lower chance to get shit result
+				else
+					butcher = butcher_results
+			if(user.mind.get_skill_level(/datum/skill/labor/butchering) == 3)
+				if(prob(10))
+					butcher = perfect_butcher_results // small chance to get great result
+				else
+					butcher = butcher_results
+			if(user.mind.get_skill_level(/datum/skill/labor/butchering) == 4)
+				if(prob(50))
+					butcher = perfect_butcher_results // decent chance to get great result
+				else
+					butcher = butcher_results
+			else
+				if(user.mind.get_skill_level(/datum/skill/labor/butchering) == 5)
+					butcher = perfect_butcher_results // only get the best results
+				else
+					butcher = butcher_results		// fallback incase skill doesn't get called
+
 		var/rotstuff = FALSE
 		var/datum/component/rot/simple/CR = GetComponent(/datum/component/rot/simple)
 		if(CR)
@@ -427,7 +463,7 @@ GLOBAL_VAR_INIT(farm_animals, FALSE)
 				if(rotstuff && istype(I,/obj/item/reagent_containers/food/snacks))
 					var/obj/item/reagent_containers/food/snacks/F = I
 					F.become_rotten()
-	..()
+	gib()
 
 /mob/living/simple_animal/spawn_dust(just_ash = FALSE)
 	if(just_ash || !remains_type)

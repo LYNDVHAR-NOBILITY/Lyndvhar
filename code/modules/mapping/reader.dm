@@ -56,7 +56,7 @@
 		// this will "crash"/stacktrace on fail
 		if(!measureOnly)
 			tfile = bapi_read_dmm_file(original_path)
-		// if rustlib for whatever reason fails and returns null
+		// if bapi for whatever reason fails and returns null
 		// try to load it the old dm way instead
 		if(!tfile)
 			tfile = file2text(original_path)

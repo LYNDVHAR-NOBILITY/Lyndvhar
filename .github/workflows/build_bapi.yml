@@ -28,6 +28,8 @@ jobs:
             -f content='+1'
 
       - name: PR Data
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           pr_json=$(curl -L -s --fail-with-body -H "Authorization: token ${{ github.token }}" ${{ github.event.issue.pull_request.url }})
           if [ `jq -r '.maintainer_can_modify' <<<$pr_json` == "false" ] ; then

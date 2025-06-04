@@ -38,7 +38,6 @@ if test -d $1/bapi; then
 	env PKG_CONFIG_ALLOW_CROSS=1 ~/.cargo/bin/cargo build --release --target=i686-unknown-linux-gnu
 	mv target/i686-unknown-linux-gnu/release/libbapi.so "$1/libbapi.so"
 	cd ..
-	cd ..
 fi
 
 # compile tgui

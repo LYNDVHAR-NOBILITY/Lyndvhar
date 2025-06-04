@@ -28,6 +28,8 @@ jobs:
             -f content='+1'
 
       - name: PR Data
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           pr_json=$(curl -L -s --fail-with-body -H "Authorization: token ${{ github.token }}" ${{ github.event.issue.pull_request.url }})
           if [ `jq -r '.maintainer_can_modify' <<<$pr_json` == "false" ] ; then
@@ -57,7 +59,7 @@ jobs:
           git pull origin "$PR_BRANCH" --depth=$((ahead_by + 1))
           git remote add upstream "https://github.com/$BASE_REPOSITORY.git"
           git fetch upstream "$BASE_BRANCH" --depth=$((behind_by + 1))
-          cd rust/bapi
+          cd bapi
 
           # Get dependencies.
           rustup target add i686-unknown-linux-gnu
@@ -71,8 +73,8 @@ jobs:
           cargo build --release --target i686-pc-windows-gnu
 
           # Copy the built targets to their checked-in locations.
-          cp target/i686-unknown-linux-gnu/release/libbapi.so ../../tools/ci/libbapi_ci.so
-          cp target/i686-pc-windows-gnu/release/bapi.dll ../../bapi.dll
+          cp target/i686-unknown-linux-gnu/release/libbapi.so ../tools/ci/libbapi_ci.so
+          cp target/i686-pc-windows-gnu/release/bapi.dll ../bapi.dll
 
           # Check if a workflow file would be modified by the merge (permissions prevent pushes if so)
           latest_workflow_commit=$(git log -n 1 --pretty=format:"%H" upstream/$BASE_BRANCH -- .github/workflows)
@@ -91,3 +93,4 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh pr comment ${{ github.event.issue.html_url }} -b 'Building BAPI failed, see the action run log for details: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}'
+

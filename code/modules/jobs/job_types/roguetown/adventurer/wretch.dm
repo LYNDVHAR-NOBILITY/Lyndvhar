@@ -305,6 +305,8 @@
 	if (istype (H.patron, /datum/patron/inhumen/zizo))
 		H.mind.AddSpell(new /obj/effect/proc_holder/spell/invoked/minion_order)
 		ADD_TRAIT(H, TRAIT_GRAVEROBBER, TRAIT_GENERIC)
+	if (istype (H.patron, /datum/patron/inhumen/matthios))
+		id = /obj/item/mattcoin
 	head = /obj/item/clothing/head/roguetown/helmet/heavy/knight/black
 	mask = /obj/item/clothing/mask/rogue/ragmask/black
 	cloak = /obj/item/clothing/cloak/stabard/dungeon

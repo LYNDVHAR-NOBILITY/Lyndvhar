@@ -41,9 +41,13 @@
 			H.change_stat("endurance", 2)
 			backl = /obj/item/rogueweapon/shield/heater
 			r_hand = /obj/item/rogueweapon/mace
+			head = /obj/item/clothing/head/roguetown/roguehood/pontifex
 			neck = /obj/item/clothing/neck/roguetown/gorget
-			shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/red
+			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/pontifex
+			wrists = /obj/item/clothing/wrists/roguetown/bracers/leather/heavy
 			armor = /obj/item/clothing/suit/roguetown/armor/plate/scale
+			cloak = /obj/item/clothing/cloak/hierophant
+			gloves = /obj/item/clothing/gloves/roguetown/fingerless_leather
 			pants = /obj/item/clothing/under/roguetown/chainlegs/iron
 			shoes = /obj/item/clothing/shoes/roguetown/boots
 			belt = /obj/item/storage/belt/rogue/leather/shalal
@@ -71,10 +75,15 @@
 			H.change_stat("intelligence", 1)
 			H.change_stat("speed", 2)
 			backl = /obj/item/rogueweapon/sword/long/rider
-			shirt = /obj/item/clothing/suit/roguetown/shirt/undershirt/red
+			head = /obj/item/clothing/head/roguetown/roguehood/pontifex
+			neck = /obj/item/clothing/neck/roguetown/gorget/leather
+			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/pontifex
+			wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
 			armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat
-			pants = /obj/item/clothing/under/roguetown/tights/black
-			shoes = /obj/item/clothing/shoes/roguetown/boots
+			cloak = /obj/item/clothing/cloak/hierophant
+			gloves = /obj/item/clothing/gloves/roguetown/fingerless_leather
+			pants = /obj/item/clothing/under/roguetown/heavy_leather_pants
+			shoes = /obj/item/clothing/shoes/roguetown/gladiator
 			belt = /obj/item/storage/belt/rogue/leather/shalal
 			H.grant_language(/datum/language/celestial)
 			var/weapons = list("Shamshir","Whips and Knives",)

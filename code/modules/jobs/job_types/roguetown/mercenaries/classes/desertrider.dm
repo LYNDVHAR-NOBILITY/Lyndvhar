@@ -76,7 +76,7 @@
 			H.change_stat("speed", 2)
 			backl = /obj/item/rogueweapon/sword/long/rider
 			head = /obj/item/clothing/head/roguetown/roguehood/pontifex
-			neck = /obj/item/clothing/neck/roguetown/gorget/leather
+			neck = /obj/item/clothing/neck/roguetown/leather
 			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/pontifex
 			wrists = /obj/item/clothing/wrists/roguetown/bracers/leather
 			armor = /obj/item/clothing/suit/roguetown/armor/leather/heavy/coat

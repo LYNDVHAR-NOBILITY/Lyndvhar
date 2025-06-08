@@ -40,6 +40,7 @@
 			H.change_stat("strength", 2)
 			H.change_stat("endurance", 2)
 			backl = /obj/item/rogueweapon/shield/heater
+			backr = /obj/item/storage/backpack/rogue/satchel
 			r_hand = /obj/item/rogueweapon/mace
 			head = /obj/item/clothing/head/roguetown/roguehood/pontifex
 			neck = /obj/item/clothing/neck/roguetown/gorget
@@ -75,6 +76,7 @@
 			H.change_stat("intelligence", 1)
 			H.change_stat("speed", 2)
 			backl = /obj/item/rogueweapon/sword/long/rider
+			backr = /obj/item/storage/backpack/rogue/satchel
 			head = /obj/item/clothing/head/roguetown/roguehood/pontifex
 			neck = /obj/item/clothing/neck/roguetown/leather
 			shirt = /obj/item/clothing/suit/roguetown/armor/gambeson/heavy/pontifex

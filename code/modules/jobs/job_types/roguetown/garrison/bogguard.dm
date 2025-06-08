@@ -51,6 +51,7 @@
 		H.mind.adjust_skillrank(/datum/skill/craft/tanning, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/reading, 1, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/misc/tracking, 3, TRUE)
+		H.mind.adjust_skillrank(/datum/skill/craft/carpentry, 2, TRUE)
 		H.mind.adjust_skillrank(/datum/skill/craft/crafting, 1, TRUE)	//Peasent levy, so some skill
 		H.mind.adjust_skillrank(/datum/skill/labor/farming, 1, TRUE)		//Peasent levy, so some skill
 		H.change_stat("perception", 1)

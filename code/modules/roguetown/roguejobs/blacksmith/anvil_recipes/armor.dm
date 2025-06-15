@@ -28,6 +28,12 @@
 	createditem_num = 1
 	craftdiff = 0
 
+/datum/anvil_recipe/armor/iron/bevor
+	name = "Bevor"
+	req_bar = /obj/item/ingot/iron
+	created_item = /obj/item/clothing/neck/roguetown/bevor/iron
+	craftdiff = 2
+
 /datum/anvil_recipe/armor/iron/gorget
 	name = "Ringed Gorget"
 	req_bar = /obj/item/ingot/iron

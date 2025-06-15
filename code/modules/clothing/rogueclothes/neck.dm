@@ -239,6 +239,12 @@
 	blocksound = PLATEHIT
 	armor_class = ARMOR_CLASS_HEAVY //On neck slot, only checked to prevent choke grabs.
 
+/obj/item/clothing/neck/roguetown/bevor/iron
+	name = "iron bevor"
+	icon_state = "iron_bevor"
+	max_integrity = 150
+	smeltresult = /obj/item/ingot/iron
+
 /obj/item/clothing/neck/roguetown/gorget
 	name = "gorget"
 	icon_state = "gorget"

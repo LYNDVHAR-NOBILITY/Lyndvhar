@@ -27,6 +27,7 @@ GLOBAL_LIST_INIT(character_flaws, list(
 	var/name
 	var/desc
 	var/ephemeral = FALSE // This flaw is currently disabled and will not process
+	var/list/conflicts_with_types // List of charflaw types this flaw conflicts with
 
 /datum/charflaw/proc/on_mob_creation(mob/user)
 	return
@@ -43,7 +44,7 @@ GLOBAL_LIST_INIT(character_flaws, list(
 /mob/living/carbon/human/has_flaw(flaw)
 	if(!flaw)
 		return
-	if(istype(charflaw, flaw))
+	if(istype(primary_charflaw, flaw)) // Changed to primary_charflaw
 		return TRUE
 
 /mob/proc/get_flaw(flaw_type)
@@ -52,9 +53,9 @@ GLOBAL_LIST_INIT(character_flaws, list(
 /mob/living/carbon/human/get_flaw(flaw_type)
 	if(!flaw_type)
 		return
-	if(charflaw != flaw_type)
+	if(!istype(primary_charflaw, flaw_type)) // Changed to primary_charflaw and check type
 		return
-	return charflaw
+	return primary_charflaw
 
 /datum/charflaw/randflaw
 	name = "Random or None"
@@ -78,11 +79,11 @@ GLOBAL_LIST_INIT(character_flaws, list(
 				if((charflaw == type) || (charflaw == /datum/charflaw/noflaw))
 					charflaw = pick_n_take(flawz)
 					charflaw = GLOB.character_flaws[charflaw]
-				H.charflaw = new charflaw()
-				H.charflaw.on_mob_creation(H)
+				H.primary_charflaw = new charflaw() // Changed to primary_charflaw
+				H.primary_charflaw.on_mob_creation(H)
 			else
-				H.charflaw = new /datum/charflaw/eznoflaw()
-				H.charflaw.on_mob_creation(H)
+				H.primary_charflaw = new /datum/charflaw/eznoflaw() // Changed to primary_charflaw
+				H.primary_charflaw.on_mob_creation(H)
 
 
 /datum/charflaw/eznoflaw
@@ -111,8 +112,8 @@ GLOBAL_LIST_INIT(character_flaws, list(
 				if((charflaw == type) || (charflaw == /datum/charflaw/randflaw))
 					charflaw = pick_n_take(flawz)
 					charflaw = GLOB.character_flaws[charflaw]
-				H.charflaw = new charflaw()
-				H.charflaw.on_mob_creation(H)
+				H.primary_charflaw = new charflaw() // Changed to primary_charflaw
+				H.primary_charflaw.on_mob_creation(H)
 			else
 				nochekk = FALSE
 				H.adjust_triumphs(-3)
@@ -363,6 +364,7 @@ GLOBAL_LIST_INIT(character_flaws, list(
 	var/concious_timer = (10 MINUTES)
 	var/do_sleep = FALSE
 	var/pain_pity_charges = 3
+	conflicts_with_types = list(/datum/charflaw/sleepless)
 	var/drugged_up = FALSE
 
 /datum/charflaw/narcoleptic/on_mob_creation(mob/user)
@@ -408,7 +410,7 @@ GLOBAL_LIST_INIT(character_flaws, list(
 			do_sleep = TRUE
 
 /proc/narcolepsy_drug_up(mob/living/living)
-	var/datum/charflaw/narcoleptic/narco = living.get_flaw(/datum/charflaw/narcoleptic)
+	var/datum/charflaw/narcoleptic/narco = living.get_flaw(/datum/charflaw/narcoleptic) // Relies on get_flaw being updated
 	if(!narco)
 		return
 	narco.drugged_up = TRUE
@@ -484,6 +486,7 @@ GLOBAL_LIST_INIT(character_flaws, list(
 /datum/charflaw/sleepless
 	name = "Insomnia"
 	desc = "I do not sleep. I cannot sleep. I've tried everything."
+	conflicts_with_types = list(/datum/charflaw/narcoleptic)
 
 /datum/charflaw/sleepless/on_mob_creation(mob/user)
 	ADD_TRAIT(user, TRAIT_NOSLEEP, TRAIT_GENERIC)

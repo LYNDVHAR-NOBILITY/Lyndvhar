@@ -1,13 +1,14 @@
 
 /mob/living/carbon/human
-	var/datum/charflaw/charflaw
+	var/datum/charflaw/primary_charflaw
+	var/list/secondary_charflaws = list()
 
 /mob/proc/sate_addiction()
 	return
 
 /mob/living/carbon/human/sate_addiction()
-	if(istype(charflaw, /datum/charflaw/addiction))
-		var/datum/charflaw/addiction/A = charflaw
+	if(istype(primary_charflaw, /datum/charflaw/addiction))
+		var/datum/charflaw/addiction/A = primary_charflaw
 		if(!A.sated)
 			to_chat(src, span_blue(A.sated_text))
 		A.sated = TRUE

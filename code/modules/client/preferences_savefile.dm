@@ -326,14 +326,37 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 		pref_species = new default_species.type()
 
 /datum/preferences/proc/_load_flaw(S)
-	var/charflaw_type
-	S["charflaw"]			>> charflaw_type
-	if(charflaw_type)
-		charflaw = new charflaw_type()
-	else
-		charflaw = pick(GLOB.character_flaws)
-		charflaw = GLOB.character_flaws[charflaw]
-		charflaw = new charflaw()
+	var/loaded_primary_charflaw_type_path // Renamed local variable to avoid conflict and clarify it's a path
+	S["primary_charflaw"] >> loaded_primary_charflaw_type_path // Load the type path string from savefile
+
+	if(loaded_primary_charflaw_type_path && ispath(loaded_primary_charflaw_type_path)) // Check if it's a valid path
+		primary_charflaw = new loaded_primary_charflaw_type_path()
+	else // If not found or invalid, pick a default
+		var/default_flaw_key = pick(GLOB.character_flaws)
+		var/default_flaw_path = GLOB.character_flaws[default_flaw_key]
+		if(ispath(default_flaw_path))
+			primary_charflaw = new default_flaw_path()
+	
+	// Load secondary flaws
+	var/list/loaded_secondary_types_paths
+	S["secondary_charflaws_types"] >> loaded_secondary_types_paths
+	
+	// Clear existing secondary flaws before loading new ones
+	for(var/datum/charflaw/sf_old in secondary_charflaws)
+		qdel(sf_old)
+	secondary_charflaws = list()
+
+	if(islist(loaded_secondary_types_paths))
+		for(var/type_path_str in loaded_secondary_types_paths)
+			if(ispath(type_path_str))
+				var/datum/charflaw/new_secondary = new type_path_str()
+				// Basic compatibility check on load, assuming is_flaw_compatible_for_slot would be too complex here
+				// and saved data should ideally be consistent. This prevents duplicates of primary or other secondaries.
+				if( (primary_charflaw && new_secondary.type == primary_charflaw.type) || (secondary_charflaws.Find(new_secondary.type)) )
+					qdel(new_secondary)
+				else if(secondary_charflaws.len < MAX_SECONDARY_VICES)
+					secondary_charflaws += new_secondary
+				else qdel(new_secondary) // Too many
 
 /datum/preferences/proc/_load_statpack(S)
 	var/statpack_type
@@ -593,7 +616,12 @@ SAVEFILE UPDATING/VERSIONING - 'Simplified', or rather, more coder-friendly ~Car
 	WRITE_FILE(S["uplink_loc"]			, uplink_spawn_loc)
 	WRITE_FILE(S["randomise"]		, randomise)
 	WRITE_FILE(S["species"]			, pref_species.name)
-	WRITE_FILE(S["charflaw"]			, charflaw.type)
+	WRITE_FILE(S["primary_charflaw"]			, primary_charflaw.type)
+
+	var/list/s_flaw_types_to_save = list()
+	for(var/datum/charflaw/sf in secondary_charflaws)
+		s_flaw_types_to_save += sf.type
+	WRITE_FILE(S["secondary_charflaws_types"], s_flaw_types_to_save)
 	WRITE_FILE(S["feature_mcolor"]					, features["mcolor"])
 	WRITE_FILE(S["feature_mcolor2"]					, features["mcolor2"])
 	WRITE_FILE(S["feature_mcolor3"]					, features["mcolor3"])

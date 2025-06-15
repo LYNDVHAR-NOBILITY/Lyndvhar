@@ -88,8 +88,11 @@ GLOBAL_LIST_INIT(special_traits, build_special_traits())
 	return FALSE
 
 /proc/apply_charflaw_equipment(mob/living/carbon/human/character, client/player)
-	if(character.charflaw)
-		character.charflaw.apply_post_equipment(character)
+	if(character.primary_charflaw)
+		character.primary_charflaw.apply_post_equipment(character)
+	if(islist(character.secondary_charflaws))
+		for(var/datum/charflaw/sf in character.secondary_charflaws)
+			sf.apply_post_equipment(character)
 
 /proc/apply_prefs_special(mob/living/carbon/human/character, client/player)
 	if(!player)

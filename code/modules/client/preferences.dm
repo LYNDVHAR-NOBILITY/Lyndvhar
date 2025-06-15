@@ -2,6 +2,8 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 
 GLOBAL_LIST_EMPTY(chosen_names)
 
+#define MAX_SECONDARY_VICES 5
+
 /datum/preferences
 	var/client/parent
 	//doohickeys for savefiles
@@ -147,7 +149,8 @@ GLOBAL_LIST_EMPTY(chosen_names)
 	var/domhand = 2
 	var/nickname = "Please Change Me"
 	var/highlight_color = "#FF0000"
-	var/datum/charflaw/charflaw
+	var/datum/charflaw/primary_charflaw // Renamed from charflaw
+	var/list/secondary_charflaws = list() // New list for secondary vices
 
 	var/family = FAMILY_NONE
 
@@ -198,10 +201,16 @@ GLOBAL_LIST_EMPTY(chosen_names)
 			return
 	//Set the race to properly run race setter logic
 	set_new_race(pref_species, null)
-	if(!charflaw)
-		charflaw = pick(GLOB.character_flaws)
-		charflaw = GLOB.character_flaws[charflaw]
-		charflaw = new charflaw()
+
+	if(!primary_charflaw) // If not loaded (e.g. new prefs or failed load for this field)
+		var/default_flaw_key = pick(GLOB.character_flaws) // pick() returns a key
+		var/default_flaw_path = GLOB.character_flaws[default_flaw_key]
+		if(ispath(default_flaw_path))
+			primary_charflaw = new default_flaw_path()
+
+	if(!islist(secondary_charflaws)) // Ensure it's a list, e.g. if loading from old save
+		secondary_charflaws = list()
+
 	if(!selected_patron)
 		selected_patron = GLOB.patronlist[default_patron]
 	key_bindings = deepCopyList(GLOB.hotkey_keybinding_list_by_key) // give them default keybinds and update their movement keys
@@ -370,7 +379,8 @@ GLOBAL_LIST_EMPTY(chosen_names)
 			dat += "<b>Virtue:</b> <a href='?_src_=prefs;preference=virtue;task=input'>[virtue]</a><BR>"
 			if(statpack.name == "Virtuous")
 				dat += "<b>Second Virtue:</b> <a href='?_src_=prefs;preference=virtuetwo;task=input'>[virtuetwo]</a><BR>"
-			dat += "<b>Vice:</b> <a href='?_src_=prefs;preference=charflaw;task=input'>[charflaw]</a><BR>"
+			dat += "<b>Primary Vice:</b> <a href='?_src_=prefs;preference=vices;task=menu'>[primary_charflaw ? primary_charflaw.name : "None"]</a><BR>" // Changed
+			dat += "<b>Secondary Vices:</b> ([secondary_charflaws.len] / [MAX_SECONDARY_VICES]) <a href='?_src_=prefs;preference=vices;task=menu'>Manage</a><BR>" // Added
 			var/datum/faith/selected_faith = GLOB.faithlist[selected_patron?.associated_faith]
 			dat += "<b>Faith:</b> <a href='?_src_=prefs;preference=faith;task=input'>[selected_faith?.name || "FUCK!"]</a><BR>"
 			dat += "<b>Patron:</b> <a href='?_src_=prefs;preference=patron;task=input'>[selected_patron?.name || "FUCK!"]</a><BR>"
@@ -847,13 +857,13 @@ GLOBAL_LIST_EMPTY(chosen_names)
 						name += ", "
 						name += virtuetwo.name
 					else
-						name = virtuetwo.name
-				if(charflaw.type in job.vice_restrictions)
+						name = virtuetwo?.name
+				if(primary_charflaw && (primary_charflaw.type in job.vice_restrictions)) // Changed charflaw to primary_charflaw
 					if(name)
 						name += ", "
-						name += charflaw.name
+						name += primary_charflaw.name
 					else
-						name += charflaw.name
+						name += primary_charflaw.name
 				if(!isnull(name))
 					HTML += "<font color='#a561a5'>[used_name] (Disallowed by Virtues / Vice: [name])</font></td> <td> </td></tr>"
 			if(length(job.virtue_restrictions))
@@ -870,8 +880,8 @@ GLOBAL_LIST_EMPTY(chosen_names)
 					HTML += "<font color='#a59461'>[used_name] (Disallowed by Virtue: [name])</font></td> <td> </td></tr>"
 					continue
 			if(length(job.vice_restrictions))
-				if(charflaw.type in job.vice_restrictions)
-					HTML += "<font color='#a56161'>[used_name] (Disallowed by Vice: [charflaw.name])</font></td> <td> </td></tr>"
+				if(primary_charflaw && (primary_charflaw.type in job.vice_restrictions)) // Changed charflaw to primary_charflaw
+					HTML += "<font color='#a56161'>[used_name] (Disallowed by Vice: [primary_charflaw.name])</font></td> <td> </td></tr>"
 					continue
 			var/job_unavailable = JOB_AVAILABLE
 			if(isnewplayer(parent?.mob))
@@ -1225,6 +1235,67 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 				SetChoices(user)
 		return 1
 
+	else if(href_list["preference"] == "vices") // New block for vices menu
+		switch(href_list["task"])
+			if("close")
+				user << browse(null, "window=vices_setup")
+				ShowChoices(user) // Go back to main character sheet
+			if("menu")
+				ShowVicesMenu(user)
+			if("select_primary")
+				var/list/available_flaws_map = list() // name -> instance
+				for(var/flaw_key_name in GLOB.character_flaws)
+					var/flaw_path = GLOB.character_flaws[flaw_key_name]
+					var/datum/charflaw/candidate = new flaw_path()
+					if(is_flaw_compatible_for_slot(candidate, TRUE)) // TRUE for primary slot
+						available_flaws_map[candidate.name] = candidate
+					else
+						qdel(candidate)
+
+				var/chosen_flaw_name = input(user, "Select your primary vice:", "Primary Vice Selection") as null|anything in sortList(available_flaws_map)
+				if(chosen_flaw_name && available_flaws_map[chosen_flaw_name])
+					if(primary_charflaw) qdel(primary_charflaw) // qdel old primary flaw instance
+					primary_charflaw = available_flaws_map[chosen_flaw_name]
+					// Clean up other candidates that were new'd up
+					for(var/key in available_flaws_map)
+						if(available_flaws_map[key] != primary_charflaw) qdel(available_flaws_map[key])
+				else // No selection or cancel, clean all new'd candidates
+					for(var/key in available_flaws_map) qdel(available_flaws_map[key])
+				ShowVicesMenu(user)
+
+			if("add_secondary")
+				if(secondary_charflaws.len >= MAX_SECONDARY_VICES)
+					to_chat(user, span_warning("You cannot select more than [MAX_SECONDARY_VICES] secondary vices."))
+				else
+					var/list/available_flaws_map = list() // name -> instance
+					for(var/flaw_key_name in GLOB.character_flaws)
+						var/flaw_path = GLOB.character_flaws[flaw_key_name]
+						var/datum/charflaw/candidate = new flaw_path()
+						if(is_flaw_compatible_for_slot(candidate, FALSE)) // FALSE for secondary slot
+							available_flaws_map[candidate.name] = candidate
+						else
+							qdel(candidate)
+
+					var/chosen_flaw_name = input(user, "Select a secondary vice:", "Secondary Vice Selection") as null|anything in sortList(available_flaws_map)
+					if(chosen_flaw_name && available_flaws_map[chosen_flaw_name])
+						secondary_charflaws += available_flaws_map[chosen_flaw_name]
+						// Clean up other candidates, except the chosen one
+						for(var/key in available_flaws_map)
+							if(available_flaws_map[key] != available_flaws_map[chosen_flaw_name]) qdel(available_flaws_map[key])
+					else // No selection or cancel, clean all new'd candidates
+						for(var/key in available_flaws_map) qdel(available_flaws_map[key])
+				ShowVicesMenu(user)
+
+			if("remove_secondary")
+				var/flaw_idx = text2num(href_list["flaw_index"])
+				if(flaw_idx >= 1 && flaw_idx <= secondary_charflaws.len)
+					var/datum/charflaw/to_remove = secondary_charflaws[flaw_idx]
+					secondary_charflaws.Remove(to_remove)
+					qdel(to_remove) // qdel the instance
+				ShowVicesMenu(user)
+		return TRUE
+
+
 	else if(href_list["preference"] == "antag")
 		switch(href_list["task"])
 			if("close")
@@ -1241,6 +1312,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 				SetAntag(user)
 			else
 				SetAntag(user)
+		return TRUE // Added for consistency
 
 	else if(href_list["preference"] == "triumphs")
 		user.show_triumphs_list()
@@ -1822,15 +1894,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 							statpack = new /datum/statpack/wildcard/virtuous
 							to_chat(user, span_purple("Your statpack has been set to virtuous (no stats) due to selecting a virtue.")) */
 
-				if("charflaw")
-					var/list/coom = GLOB.character_flaws.Copy()
-					var/result = input(user, "Select a flaw", "LYNDVHAR") as null|anything in coom
-					if(result)
-						result = coom[result]
-						var/datum/charflaw/C = new result()
-						charflaw = C
-						if(charflaw.desc)
-							to_chat(user, "<span class='info'>[charflaw.desc]</span>")
+				// Removed old direct charflaw input block; it's handled by the new vices menu.
 
 				if("mutant_color")
 					var/new_mutantcolor = color_pick_sanitized_lumi(user, "Choose your character's mutant #1 color:", "Character Preference","#"+features["mcolor"])
@@ -1869,15 +1933,6 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 					if(new_s_tone)
 						skin_tone = listy[new_s_tone]
 						try_update_mutant_colors()
-
-				if("charflaw")
-					var/selectedflaw
-					selectedflaw = input(user, "Choose your character's flaw:", "Character Preference") as null|anything in GLOB.character_flaws
-					if(selectedflaw)
-						charflaw = GLOB.character_flaws[selectedflaw]
-						charflaw = new charflaw()
-						if(charflaw.desc)
-							to_chat(user, span_info("[charflaw.desc]"))
 
 				if("char_accent")
 					var/selectedaccent = input(user, "Choose your character's accent:", "Character Preference") as null|anything in GLOB.character_accents
@@ -2279,7 +2334,7 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 		random_character(gender, antagonist)
 
 	// Bandaid to undo no arm flaw prosthesis
-	if(charflaw)
+	if(primary_charflaw) //changed to primary charflaw
 		var/obj/item/bodypart/O = character.get_bodypart(BODY_ZONE_R_ARM)
 		if(O)
 			O.drop_limb()
@@ -2350,9 +2405,23 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 
 	character.jumpsuit_style = jumpsuit_style
 
-	if(charflaw)
-		character.charflaw = new charflaw.type()
-		character.charflaw.on_mob_creation(character)
+	// Apply primary charflaw mechanics
+	// The character mob (human.dm) will need `var/datum/charflaw/primary_charflaw`
+	if(primary_charflaw)
+		character.primary_charflaw = new primary_charflaw.type() // This line assumes 'character' (mob) has a 'primary_charflaw' var
+		if(character.primary_charflaw) // This line also assumes 'character' (mob) has a 'primary_charflaw' var
+			character.primary_charflaw.on_mob_creation(character) // This line also assumes 'character' (mob) has a 'primary_charflaw' var
+	else
+		character.primary_charflaw = null // This line also assumes 'character' (mob) has a 'primary_charflaw' var
+
+	// Apply secondary charflaws
+	// Assumes character mob (human.dm or addiction.dm) has var/list/secondary_charflaws
+	character.secondary_charflaws = list() // Initialize/clear the list on the character
+	for(var/datum/charflaw/pref_sec_flaw in secondary_charflaws)
+		if(ispath(pref_sec_flaw.type))
+			var/datum/charflaw/new_sec_flaw_instance = new pref_sec_flaw.type()
+			new_sec_flaw_instance.on_mob_creation(character) // Apply on_mob_creation effects
+			character.secondary_charflaws += new_sec_flaw_instance
 
 	character.dna.real_name = character.real_name
 
@@ -2472,4 +2541,81 @@ Slots: [job.spawn_positions] [job.round_contrib_points ? "RCP: +[job.round_contr
 		return FALSE
 	if(!migrant.active)
 		return FALSE
+	return TRUE
+
+/datum/preferences/proc/ShowVicesMenu(mob/user)
+	var/list/dat = list()
+	dat += "<center><a href='?_src_=prefs;preference=vices;task=close'>Done With Vices</a></center><br>"
+	dat += "<h2>Vice Selection</h2>"
+	dat += "<i>You can select one primary vice and up to [MAX_SECONDARY_VICES] secondary vices.</i><br><br>"
+
+	// Display Primary Vice
+	dat += "<b>Primary Vice:</b> [primary_charflaw ? primary_charflaw.name : "None"] "
+	dat += "<a href='?_src_=prefs;preference=vices;task=select_primary'>Change</a><br>"
+	if(primary_charflaw)
+		dat += "<i>[primary_charflaw.desc]</i><br>"
+	dat += "<br>"
+
+	// Display Secondary Vices
+	dat += "<b>Secondary Vices ([secondary_charflaws.len] / [MAX_SECONDARY_VICES]):</b><br>"
+	if(secondary_charflaws.len > 0)
+		for(var/i = 1 to secondary_charflaws.len)
+			var/datum/charflaw/sf = secondary_charflaws[i]
+			dat += "- [sf.name] <a href='?_src_=prefs;preference=vices;task=remove_secondary;flaw_index=[i]'>Remove</a><br>"
+			dat += "  <i>[sf.desc]</i><br>"
+	else
+		dat += "<i>No secondary vices selected.</i><br>"
+
+	if(secondary_charflaws.len < MAX_SECONDARY_VICES)
+		dat += "<a href='?_src_=prefs;preference=vices;task=add_secondary'>Add Secondary Vice</a><br>"
+	else
+		dat += "<i>Maximum number of secondary vices selected.</i><br>"
+
+	dat += "<br>"
+	dat += "<center><a href='?_src_=prefs;preference=vices;task=close'>Done With Vices</a></center><br>"
+
+	var/datum/browser/noclose/popup = new(user, "vices_setup", "<div align='center'>Vice Configuration</div>", 450, 500)
+	popup.set_window_options("can_close=0") // User must click "Done With Vices"
+	popup.set_content(dat.Join())
+	popup.open(FALSE)
+
+/datum/preferences/proc/check_flaw_conflict(datum/charflaw/flaw_A, datum/charflaw/flaw_B)
+	if(!ispath(flaw_A?.type) || !ispath(flaw_B?.type))
+		return FALSE // Invalid flaws passed
+
+	// Use initial() to get prototype for conflict checking, as instance might not have var defined if not set on all.
+	var/datum/charflaw/default_A = initial(flaw_A.type)
+	var/datum/charflaw/default_B = initial(flaw_B.type)
+
+	if(!default_A || !default_B) return FALSE
+
+	if(islist(default_A.conflicts_with_types) && (flaw_B.type in default_A.conflicts_with_types))
+		return TRUE
+	if(islist(default_B.conflicts_with_types) && (flaw_A.type in default_B.conflicts_with_types))
+		return TRUE
+	return FALSE
+
+/datum/preferences/proc/is_flaw_compatible_for_slot(datum/charflaw/candidate_flaw, is_for_primary_slot = FALSE)
+	if(!ispath(candidate_flaw?.type)) return FALSE // Invalid candidate
+
+	if(is_for_primary_slot)
+		// Candidate for primary slot.
+		// Cannot be one of the current secondaries or conflict with them.
+		for(var/datum/charflaw/sec_flaw in secondary_charflaws)
+			if(candidate_flaw.type == sec_flaw.type) return FALSE
+			if(check_flaw_conflict(candidate_flaw, sec_flaw))
+				return FALSE
+	else
+		// Candidate for secondary slot.
+		// Cannot be the current primary or conflict with it.
+		if(primary_charflaw)
+			if(candidate_flaw.type == primary_charflaw.type) return FALSE
+			if(check_flaw_conflict(candidate_flaw, primary_charflaw))
+				return FALSE
+
+		// Cannot be one of the other current secondaries or conflict with them.
+		for(var/datum/charflaw/sec_flaw in secondary_charflaws)
+			if(candidate_flaw.type == sec_flaw.type) return FALSE // Already selected as a secondary
+			if(check_flaw_conflict(candidate_flaw, sec_flaw))
+				return FALSE
 	return TRUE

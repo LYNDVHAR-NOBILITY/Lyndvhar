@@ -72,8 +72,13 @@
 		handle_liver()
 		update_rogfat()
 		update_rogstam()
-		if(charflaw && !charflaw.ephemeral)
-			charflaw.flaw_on_life(src)
+		if(primary_charflaw && !primary_charflaw.ephemeral) // Changed to primary_charflaw
+			primary_charflaw.flaw_on_life(src) // Changed to primary_charflaw
+
+		for(var/datum/charflaw/sf in secondary_charflaws)
+			if(sf && !sf.ephemeral)
+				sf.flaw_on_life(src)
+
 		if(health <= 0)
 			adjustOxyLoss(0.5)
 		if(mode == AI_OFF && !client && !HAS_TRAIT(src, TRAIT_NOSLEEP))

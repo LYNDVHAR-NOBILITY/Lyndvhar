@@ -156,8 +156,8 @@
 		zombie.update_a_intents()
 		zombie.aggressive = FALSE
 		zombie.mode = AI_OFF
-		if(zombie.charflaw)
-			zombie.charflaw.ephemeral = FALSE
+		if(zombie.primary_charflaw)
+			zombie.primary_charflaw.ephemeral = FALSE
 		zombie.update_body()
 
 		zombie.STASTR = src.STASTR
@@ -239,8 +239,8 @@
 	ambushable = zombie.ambushable
 	zombie.ambushable = FALSE
 
-	if(zombie.charflaw)
-		zombie.charflaw.ephemeral = TRUE
+	if(zombie.primary_charflaw)
+		zombie.primary_charflaw.ephemeral = TRUE
 	zombie.mob_biotypes |= MOB_UNDEAD
 	zombie.faction += "undead"
 	zombie.faction += "zombie"

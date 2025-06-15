@@ -90,8 +90,9 @@
 	L.cmode_music = 'sound/music/combat_cult.ogg'
 	L.faction = list("undead")
 
-	if (L.charflaw)
-		QDEL_NULL(L.charflaw)
+	if(L.primary_charflaw)
+		qdel(L.primary_charflaw)
+		L.primary_charflaw = null
 
 	L.mob_biotypes |= MOB_UNDEAD
 	replace_eyes(L)
@@ -224,8 +225,9 @@
 
 	old_body.mind.transfer_to(new_body)
 
-	if (new_body.charflaw)
-		QDEL_NULL(new_body.charflaw)
+	if(new_body.primary_charflaw)
+		qdel(new_body.primary_charflaw)
+		new_body.primary_charflaw = null
 	
 	new_body.real_name = old_body.name
 	new_body.dna.real_name = old_body.real_name

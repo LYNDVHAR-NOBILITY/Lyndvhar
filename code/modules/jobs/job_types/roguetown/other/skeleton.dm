@@ -43,8 +43,9 @@
 		H.base_intents = list(INTENT_HELP, INTENT_DISARM, INTENT_GRAB, /datum/intent/simple/claw)
 		H.update_a_intents()
 		H.ambushable = FALSE
-		if(H.charflaw)
-			QDEL_NULL(H.charflaw)
+		if(H.primary_charflaw)
+			qdel(H.primary_charflaw)
+			H.primary_charflaw = null
 		H.mob_biotypes = MOB_UNDEAD
 		H.faction = list("undead")
 		H.name = "skelelon"

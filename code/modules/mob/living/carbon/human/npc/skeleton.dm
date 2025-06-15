@@ -52,8 +52,9 @@
 	src.regenerate_limb(BODY_ZONE_L_ARM)
 	// src.remove_all_languages()
 	// uncomment this to prohibit skeletons from knowing or speaking any languages. This is commented to allow skeletons to be the main subject of admin events. (eg: skeleton traders, skeletons concealing their bones and blending in with the kingdom society, the underworld bar skeletons, skeletons telling skeleton jokes)
-	if(src.charflaw)
-		QDEL_NULL(src.charflaw)
+	if(src.primary_charflaw)
+		QDEL_NULL(src.primary_charflaw)
+		src.primary_charflaw = null
 	mob_biotypes |= MOB_UNDEAD
 	faction = list("undead")
 	name = "Skeleton"

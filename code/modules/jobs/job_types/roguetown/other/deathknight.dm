@@ -57,8 +57,9 @@
 		eyes = new /obj/item/organ/eyes/night_vision/zombie
 		eyes.Insert(H)
 		H.ambushable = FALSE
-		if(H.charflaw)
-			QDEL_NULL(H.charflaw)
+		if(H.primary_charflaw)
+			qdel(H.primary_charflaw)
+			H.primary_charflaw = null
 		H.mob_biotypes = MOB_UNDEAD
 		H.faction = list("undead")
 		H.name = "Death Knight"

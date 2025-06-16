@@ -4,7 +4,7 @@
 	allowed_sexes = list(MALE, FEMALE)
 	allowed_races = RACES_ALL_KINDS
 	outfit = /datum/outfit/job/roguetown/adventurer/witch
-	category_tags = list(CTAG_PILGRIM, CTAG_TOWNER, CTAG_ADVENTURER)
+	category_tags = list(CTAG_PILGRIM, CTAG_ADVENTURER)
 	traits_applied = list(TRAIT_RITUALIST, TRAIT_DEATHSIGHT, TRAIT_ARCYNE_T1)
 	cmode_music = 'sound/music/combat_cult.ogg'
 

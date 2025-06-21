@@ -1461,3 +1461,20 @@
 	set category = "Noises"
 
 	emote("snap3", intentional = TRUE)
+
+/datum/emote/living/chitter
+	key = "chitter"
+	key_third_person = "chitters!"
+	message = "chitters!"
+	emote_type = EMOTE_AUDIBLE | EMOTE_VISIBLE
+	message_muffled = "makes a muffled chitter!"
+	vary = TRUE
+	show_runechat = FALSE
+
+/datum/emote/living/flutter
+	key = "flutter"
+	key_third_person = "flutters!"
+	message = "flutters!"
+	emote_type = EMOTE_AUDIBLE | EMOTE_VISIBLE
+	show_runechat = FALSE
+

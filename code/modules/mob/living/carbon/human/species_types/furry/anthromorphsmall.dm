@@ -179,6 +179,8 @@
 		/mob/proc/howl,
 		/mob/proc/cackle,
 		/mob/proc/whine,
+		/mob/proc/chitter,
+		/mob/proc/flutter,
 	)
 
 /datum/species/anthromorphsmall/on_species_loss(mob/living/carbon/C)
@@ -202,4 +204,6 @@
 		/mob/proc/phiss, //
 		/mob/proc/cackle, //
 		/mob/proc/whine, //
+		/mob/proc/chitter,
+		/mob/proc/flutter,
     )

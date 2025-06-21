@@ -187,6 +187,8 @@
 		/mob/proc/howl,
 		/mob/proc/cackle,
 		/mob/proc/whine,
+		/mob/proc/chitter,
+		/mob/proc/flutter,
 	)
 
 /datum/species/anthromorph/on_species_loss(mob/living/carbon/C)
@@ -210,6 +212,8 @@
 		/mob/proc/phiss, //
 		/mob/proc/cackle, //
 		/mob/proc/whine, //
+		/mob/proc/chitter,
+		/mob/proc/flutter,
     )
 
 /mob/proc/hiss()
@@ -360,4 +364,24 @@
 	if(next_move > world.time)
 		return
 	emote("moo")
+	next_move = world.time + 50
+
+/mob/proc/chitter()
+	set name = "Chitter"
+	set category = "Noises"
+	if(stat != CONSCIOUS)
+		return
+	if(next_move > world.time)
+		return
+	emote("chitter")
+	next_move = world.time + 50
+
+/mob/proc/flutter()
+	set name = "Flutter"
+	set category = "Noises"
+	if(stat != CONSCIOUS)
+		return
+	if(next_move > world.time)
+		return
+	emote("flutter")
 	next_move = world.time + 50
